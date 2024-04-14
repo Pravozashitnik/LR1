@@ -1,0 +1,30 @@
+name: Run Tests
+
+on:
+ push:
+    branches:
+      - '**'
+
+jobs:
+ build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up C++
+      uses: actions/setup-cpp@v2
+      with:
+        cpp-version: '14'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgtest-dev
+
+    - name: Build
+      run: |
+        g++ -std=c++14 -o test_runner tests/lr1_tests.cpp -lgtest -lgtest_main -pthread
+
+    - name: Run tests
+      run: ./test_runner
